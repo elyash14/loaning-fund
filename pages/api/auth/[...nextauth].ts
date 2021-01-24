@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import User from "../../../src/models/User";
+import { makeHash } from "../../../src/utils/general";
 
 const options = {
   // Configure one or more authentication providers
@@ -12,13 +13,18 @@ const options = {
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "Please enter your username",
+        },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        const password = makeHash(credentials.password);
         const user = await User.findOne({
           username: credentials.username,
-          password: credentials.password,
+          password,
         }).exec();
 
         if (user) {
