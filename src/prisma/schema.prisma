@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://phpmyadmin:root@localhost:3306/loaning_fund_db"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  phone         String   @unique
+  password      String
+  firstName     String
+  lastName      String?
+  avatarPicture String?
+  creditCard    String?
+  color         String?
+  createdAt     DateTime @default(now())
+  lastLogin     DateTime?
+  referral      User? @relation(fields: [referalId], references: [id])
+  referalId     String?
+}
