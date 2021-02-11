@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import { makeHash } from "../../../src/utils/general";
+import Adapters from "next-auth/adapters";
+import prisma from '../../../src/prisma/prisma'
 
 const options = {
   // Configure one or more authentication providers
@@ -20,8 +22,12 @@ const options = {
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        // const password = makeHash(credentials.password);
-        const user = { username: "admin", password: "123456" };
+        const user = prisma.user.findFirst({
+          where: {
+            username: credentials.username,
+            password: makeHash( credentials.password)
+          }
+        });
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
           return Promise.resolve(user);
@@ -36,14 +42,25 @@ const options = {
     }),
   ],
 
-  // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL,
+  pages: {
+    signIn: '/auth/signin',
+    // signOut: '/auth/signout',
+    // error: '/auth/error', // Error code passed in query string as ?error=
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    // newUser: null // If set, new users will be directed here on first sign in
+  },
+
+  adapter: Adapters.Prisma.Adapter({ prisma }),
 
   session: {
     jwt: true,
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
+  secret: process.env.APP_SECRET,
+
+  // debug: true
 };
 
 export default (req, res) => NextAuth(req, res, options);

@@ -8,17 +8,24 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  username      String   @unique
-  phone         String   @unique
+  id            String    @id @default(uuid())
+  username      String    @unique
+  phone         String    @unique
   password      String
   firstName     String
   lastName      String?
   avatarPicture String?
   creditCard    String?
   color         String?
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
   lastLogin     DateTime?
-  referral      User? @relation(fields: [referalId], references: [id])
+  role          Role      @default(USER)
+  referral      User?     @relation(fields: [referalId], references: [id])
   referalId     String?
+  User          User[]    @relation("UserToUser")
+}
+
+enum Role {
+  USER
+  ADMIN
 }

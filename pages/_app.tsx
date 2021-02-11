@@ -1,4 +1,4 @@
-import "../src/styles/globals.css";
+import "../public/style.css";
 import { Provider } from 'next-auth/client'
 import { useEffect } from "react";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
