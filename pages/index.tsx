@@ -1,14 +1,20 @@
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/client";
-import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Button,
+} from "@material-ui/core";
+import RestoreIcon from "@material-ui/icons/Restore";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const [session, loading] = useSession();
   const [value, setValue] = useState(0);
+
 
   return (
     <div>
@@ -17,6 +23,10 @@ export default function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <h1>Home Page</h1>
+
+      <Link href="admin/users">
+        <a>Users List</a>
+      </Link>
 
       <div>
         {!session && (
