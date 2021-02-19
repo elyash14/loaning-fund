@@ -6,17 +6,17 @@ import {
   styled,
   Toolbar,
   Typography,
-  Box
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import theme from "../../configs/theme";
+  Box,
+} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import theme from '../../configs/theme';
 
 const Actions = styled(Box)({
-    flex: 1,
-    '& > button':{
-        marginRight: theme.spacing()
-    }
-})
+  flex: 1,
+  '& > button': {
+    marginRight: theme.spacing(),
+  },
+});
 
 const NavBar = () => {
   return (

@@ -1,25 +1,22 @@
-import { Color } from "@material-ui/core";
-import {
-  createMuiTheme,
-  SimplePaletteColorOptions,
-} from "@material-ui/core/styles";
+import { Color } from '@material-ui/core';
+import { createMuiTheme, SimplePaletteColorOptions } from '@material-ui/core/styles';
 
 const primary: SimplePaletteColorOptions & Partial<Color> = {
-  light: "#ed4b82",
-  main: "#e91e63",
-  dark: "#a31545",
+  light: '#33ab9f',
+  main: '#009688',
+  dark: '#00695f',
 };
 
 const secondary: SimplePaletteColorOptions & Partial<Color> = {
-  light: "#ffb851",
-  main: "#ffa726",
-  dark: "#b2741a",
+  light: '#ed4b82',
+  main: '#e91e63',
+  dark: '#a31545',
 };
 
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {
-    type: "dark",
+    type: 'dark',
     primary,
     secondary,
   },
@@ -27,7 +24,7 @@ const theme = createMuiTheme({
   spacing: 6,
 
   typography: {
-    fontFamily: "source-sans-pro,Roboto,RobotoDraft,Helvetica,Arial,sans-serif",
+    fontFamily: 'source-sans-pro,Roboto,RobotoDraft,Helvetica,Arial,sans-serif',
     fontWeightMedium: 600,
     fontSize: 18,
   },
@@ -35,18 +32,18 @@ const theme = createMuiTheme({
   overrides: {
     MuiGrid: {
       container: {
-        height: "100%",
+        height: '100%',
       },
     },
     MuiTypography: {
       h4: {
-        fontSize: "1.75rem",
+        fontSize: '1.75rem',
       },
     },
     MuiPaper: {
       elevation1: {
         boxShadow:
-          "0px 0px 5px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%), 0px 1px 1px 0px rgb(0 0 0 / 12%)",
+          '0px 0px 5px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%), 0px 1px 1px 0px rgb(0 0 0 / 12%)',
       },
     },
     MuiFormControl: {
@@ -56,14 +53,14 @@ const theme = createMuiTheme({
     },
     MuiInputBase: {
       input: {
-        padding: "10px 5px 8px",
-        borderRadius: "4px",
-        background: "#4f6b68",
+        padding: '10px 5px 8px',
+        borderRadius: '4px',
+        background: '#4f6b68',
       },
     },
     MuiFormLabel: {
       root: {
-        lineHeight: "unset",
+        lineHeight: 'unset',
       },
     },
     MuiFormHelperText: {
@@ -73,14 +70,14 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        textTransform: "unset",
+        textTransform: 'unset',
       },
       sizeLarge: {
-        fontWeight: "bold",
-        fontSize: "1.2rem",
+        fontWeight: 'bold',
+        fontSize: '1.2rem',
       },
       contained: {
-        boxShadow: "0px 0px 0px 1px rgb(0 0 0 / 20%)",
+        boxShadow: '0px 0px 0px 1px rgb(0 0 0 / 20%)',
       },
     },
     MuiSnackbar: {

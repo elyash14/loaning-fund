@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.19",
     "@material-ui/icons": "^4.11.2",
     "@prisma/client": "^2.15.0",
     "axios": "^0.21.1",
