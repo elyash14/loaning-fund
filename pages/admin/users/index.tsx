@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { Fab, IconButton, Paper } from '@material-ui/core';
 // import ImageIcon from "@material-ui/icons/Image";
 import AddIcon from '@material-ui/icons/Add';
@@ -18,6 +19,7 @@ import {
   ColParams,
 } from '@material-ui/data-grid';
 import { useCallback, useEffect, useState } from 'react';
+const FabAction = dynamic(() => import('../../../src/components/general/FabAction'));
 
 const columns: ColDef[] = [
   { field: 'username', headerName: 'Username', flex: 1 },
@@ -115,21 +117,14 @@ const Users: ProjectPage<null> = () => {
           loading={loading}
         />
       </Paper>
-      <Fab
-        variant="extended"
-        color="primary"
-        style={{
-          margin: 0,
-          top: 'auto',
-          left: 20,
-          bottom: 20,
-          right: 'auto',
-          position: 'fixed',
-        }}
-      >
-        <AddIcon />
-        Add New User
-      </Fab>
+      <Link href="/admin/users/add">
+        <a>
+          <FabAction>
+            <AddIcon />
+            Add New User
+          </FabAction>
+        </a>
+      </Link>
     </>
   );
 };
