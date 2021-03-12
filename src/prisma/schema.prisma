@@ -12,6 +12,7 @@ model User {
   username      String    @unique
   phone         String    @unique
   password      String
+  gender        Gender    @default(MALE)
   firstName     String
   lastName      String?
   avatarPicture String?
@@ -28,4 +29,9 @@ model User {
 enum Role {
   USER
   ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }

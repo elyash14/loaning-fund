@@ -2,7 +2,7 @@ import { SortModel } from '@material-ui/data-grid';
 import axios from 'axios';
 import useSWR from 'swr';
 import { IModelFilter } from '../interfaces/general';
-import { IUser } from '../interfaces/users';
+import { IUser, IUserForm } from '../interfaces/users';
 import fetcher from './fetcher';
 
 // interface IUsersApi {
@@ -45,5 +45,42 @@ export const getUsers = async (
   } catch (error) {
     console.log(error);
     return { rowCount: 0, users: [] };
+  }
+};
+
+export const addUser = async (
+  // token: String,
+  user: IUserForm,
+): Promise<IUser> => {
+  try {
+    const { data } = await axios.post('/api/users', user, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    return data.user;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
+export const uploadAvatar = async (
+  // token: String,
+  file: File,
+  onUploadProgress: (progressEvent: any) => void,
+): Promise<string> => {
+  const form = new FormData();
+  form.append('avatar', file);
+
+  try {
+    const { data } = await axios.post('/api/users/upload-avatar', form, {
+      headers: { 'content-type': 'multipart/form-data', Accept: 'application/json' },
+      onUploadProgress,
+    });
+    return data.filename;
+  } catch (error) {
+    console.log(error);
+    return undefined;
   }
 };

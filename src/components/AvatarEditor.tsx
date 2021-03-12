@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
 import { Button, Slider } from '@material-ui/core';
@@ -15,6 +15,7 @@ interface IAvatarEditor {
 }
 const AvatarEditor: FC<IAvatarEditor> = (props) => {
   const { avatarPicture, openModal, setOpenModal, onSave } = props;
+
   const classes = useStyles();
 
   // states
@@ -22,6 +23,10 @@ const AvatarEditor: FC<IAvatarEditor> = (props) => {
   const [image, setImage] = useState(avatarPicture);
   const [ready, setReady] = useState(false);
   const [imageScale, setImageScale] = useState(1);
+
+  useEffect(() => {
+    setImage(avatarPicture);
+  }, [avatarPicture]);
 
   const handleClose = () => {
     setOpenModal(false);
@@ -43,7 +48,7 @@ const AvatarEditor: FC<IAvatarEditor> = (props) => {
       fetch(canvas)
         .then((res) => res.blob())
         .then(async (blob) => {
-          onSave(new File([blob], 'avatarPicture'), canvas);
+          onSave(new File([blob], 'avatarPicture.jpg'), canvas); // convert to jpeg
         });
     }
     handleClose();
