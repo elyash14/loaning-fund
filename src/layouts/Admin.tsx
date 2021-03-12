@@ -1,6 +1,7 @@
 import { Container, styled } from '@material-ui/core';
 import dynamic from 'next/dynamic';
 import theme from '../configs/theme';
+import { AlertProvider } from '../providers/AlertProvider';
 const NavBar = dynamic(() => import('./admin/NavBar'));
 
 const MainContainer = styled(Container)({
@@ -9,10 +10,10 @@ const MainContainer = styled(Container)({
 
 const AdminLayout = ({ children }) => {
   return (
-    <>
+    <AlertProvider>
       <NavBar />
       <MainContainer maxWidth="lg">{children}</MainContainer>
-    </>
+    </AlertProvider>
   );
 };
 

@@ -26,6 +26,7 @@ import ColorPicker, {
 import { addUser, uploadAvatar } from '../../../src/apis/user';
 import { IUserForm } from '../../../src/interfaces/users';
 import { useRouter } from 'next/router';
+import useAlert from '../../../src/providers/AlertProvider';
 const AvatarEditor = dynamic(() => import('../../../src/components/AvatarEditor'));
 
 const AddPaper = styled(Paper)({
@@ -64,6 +65,8 @@ const RadioGroupWrapper = styled(RadioGroup)({
 
 const AddUser: ProjectPage<null> = () => {
   const router = useRouter();
+  const { setAlert } = useAlert();
+
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -79,7 +82,6 @@ const AddUser: ProjectPage<null> = () => {
   const [progress, setProgress] = useState(0);
 
   const handleSaveAvatarPicture = async (file: File, image: string) => {
-    // setAvatarFile(file);
     setAvatarPicture(image);
     const response = await uploadAvatar(file, (event) => {
       setProgress(Math.round((100 * event.loaded) / event.total));
@@ -105,8 +107,10 @@ const AddUser: ProjectPage<null> = () => {
     };
     const user = await addUser(newUser);
     if (user) {
-      //TODO: set alert
+      setAlert('User added successfully');
       router.push('/admin/users');
+    } else {
+      setAlert('Something went wrong!', 'error');
     }
   };
 
