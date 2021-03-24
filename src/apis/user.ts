@@ -48,12 +48,43 @@ export const getUsers = async (
   }
 };
 
+export const getUser = async (userId: string): Promise<IUser> => {
+  try {
+    const { data } = await axios.get('/api/users/' + userId, {
+      headers: {
+        Accept: 'application/json' /* Authorization: `Bearer ${token}` */,
+      },
+    });
+    return data.user;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
 export const addUser = async (
   // token: String,
   user: IUserForm,
 ): Promise<IUser> => {
   try {
     const { data } = await axios.post('/api/users', user, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    return data.user;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
+export const updateUser = async (
+  // token: String,
+  user: IUserForm,
+): Promise<IUser> => {
+  try {
+    const { data } = await axios.put('/api/users', user, {
       headers: {
         Accept: 'application/json',
       },

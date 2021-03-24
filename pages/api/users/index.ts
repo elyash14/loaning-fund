@@ -99,7 +99,62 @@ usersHandler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ success: true, user: data });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ success: false });
+  }
+});
 
+// edit user
+usersHandler.put(async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== 'PUT') {
+    res.status(400).json({ success: false });
+  }
+
+  const { body } = req;
+
+  // move temp uploaded file to public/avatar directory
+  let avatarPath = null;
+  if (body.avatarFileName) {
+    avatarPath = '/avatars/' + body.avatarFileName;
+    if (!fs.existsSync('public/avatars')) {
+      fs.mkdirSync('public/avatars');
+    }
+    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => {});
+
+    // remove old picture
+    const user = await prisma.user.findUnique({
+      select: {
+        id: true,
+        avatarPicture: true,
+      },
+      where: { id: body.id },
+    });
+    if (user.avatarPicture) {
+      fs.unlink('public' + user.avatarPicture, function (err) {
+        if (err) return console.log(err);
+      });
+    }
+  }
+
+  // save user
+  try {
+    const data = await prisma.user.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        username: body.username,
+        gender: body.gender.toUpperCase(),
+        firstName: body.firstName,
+        lastName: body.lastName,
+        phone: body.phone,
+        color: body.color,
+        avatarPicture: avatarPath,
+        creditCard: body.creditCard,
+      },
+    });
+    res.status(200).json({ success: true, user: data });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false });
   }
 });

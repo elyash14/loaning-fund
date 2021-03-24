@@ -18,6 +18,7 @@ const TextField: FC<ITextFieldProps> = (props) => {
         id={name}
         aria-describedby={`${name}-helper-text`}
         fullWidth
+        value={value}
         onChange={(e) => onChangeTextField(e.currentTarget.value)}
       />
       <FormHelperText id={`${name}-helper-text`}>{placeholder}</FormHelperText>

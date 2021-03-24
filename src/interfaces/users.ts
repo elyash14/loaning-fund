@@ -19,8 +19,9 @@ export interface IUser {
 }
 
 export interface IUserForm {
+  id?: string;
   username: string;
-  password: string;
+  password?: string;
   gender: string;
   phone: string;
   firstName: string;

@@ -16,18 +16,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-import { ProjectPage } from '../../../src/interfaces/general';
-import theme from '../../../src/configs/theme';
-import TextField from '../../../src/components/general/TextField';
-import { useState } from 'react';
+import { ProjectPage } from '../../../../src/interfaces/general';
+import theme from '../../../../src/configs/theme';
+import TextField from '../../../../src/components/general/TextField';
+import { useEffect, useState } from 'react';
 import ColorPicker, {
   generateRandomColor,
-} from '../../../src/components/general/ColorPicker';
-import { addUser, uploadAvatar } from '../../../src/apis/user';
-import { IUserForm } from '../../../src/interfaces/users';
+} from '../../../../src/components/general/ColorPicker';
+import { addUser, getUser, uploadAvatar, updateUser } from '../../../../src/apis/user';
+import { IUserForm } from '../../../../src/interfaces/users';
 import { useRouter } from 'next/router';
-import useAlert from '../../../src/providers/AlertProvider';
-const AvatarEditor = dynamic(() => import('../../../src/components/AvatarEditor'));
+import useAlert from '../../../../src/providers/AlertProvider';
+const AvatarEditor = dynamic(() => import('../../../../src/components/AvatarEditor'));
 
 const AddPaper = styled(Paper)({
   padding: theme.spacing(10, 5),
@@ -66,20 +66,45 @@ const RadioGroupWrapper = styled(RadioGroup)({
 const AddUser: ProjectPage<null> = () => {
   const router = useRouter();
   const { setAlert } = useAlert();
+  const { userId } = router.query;
 
-  const [username, setUsername] = useState<string>();
+  const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>();
   const [gender, setGender] = useState<'male' | 'female'>('male');
-  const [firstName, setFirstName] = useState<string>();
-  const [lastName, setLastName] = useState<string>();
-  const [phone, setPhone] = useState<string>();
-  const [creditCard, setCreditCard] = useState<string>();
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [creditCard, setCreditCard] = useState<string>('');
   const [color, setColor] = useState<string>(generateRandomColor());
   const [avatarPicture, setAvatarPicture] = useState<string>();
   const [avatarFileName, setAvatarFileName] = useState<string>();
   //
   const [openAvatarModal, setOpenAvatarModal] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const process = async () => {
+      const user = await getUser(String(userId));
+      if (user) {
+        setUsername(user.username);
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setGender(user.gender.toLowerCase() as any);
+        setPhone(user.phone);
+        setAvatarPicture(user.avatarPicture);
+        if (user.color) {
+          setColor(user.color);
+        }
+        if (user.creditCard) {
+          setCreditCard(user.creditCard);
+        }
+      }
+    };
+
+    if (userId) {
+      process();
+    }
+  }, [userId]);
 
   const handleSaveAvatarPicture = async (file: File, image: string) => {
     setAvatarPicture(image);
@@ -94,23 +119,46 @@ const AddUser: ProjectPage<null> = () => {
 
   const handleSave = async () => {
     //TODO add client validation
-    const newUser: IUserForm = {
-      username,
-      password,
-      gender,
-      firstName,
-      lastName,
-      phone,
-      creditCard,
-      color,
-      avatarFileName,
-    };
-    const user = await addUser(newUser);
-    if (user) {
-      setAlert('User added successfully');
-      router.push('/admin/users');
+    if (!userId) {
+      // add new user
+      const newUser: IUserForm = {
+        username,
+        password,
+        gender,
+        firstName,
+        lastName,
+        phone,
+        creditCard,
+        color,
+        avatarFileName,
+      };
+      const user = await addUser(newUser);
+      if (user) {
+        setAlert('User added successfully');
+        router.push('/admin/users');
+      } else {
+        setAlert('Something went wrong!', 'error');
+      }
     } else {
-      setAlert('Something went wrong!', 'error');
+      // edit user
+      const newUser: IUserForm = {
+        id: String(userId),
+        username,
+        gender,
+        firstName,
+        lastName,
+        phone,
+        creditCard,
+        color,
+        avatarFileName,
+      };
+      const user = await updateUser(newUser);
+      if (user) {
+        setAlert('User updated successfully');
+        router.push('/admin/users');
+      } else {
+        setAlert('Something went wrong!', 'error');
+      }
     }
   };
 
@@ -121,7 +169,6 @@ const AddUser: ProjectPage<null> = () => {
           <Grid item xs={12} sm={10} md={8}>
             <Typography variant="h4">Add New User</Typography>
             <br />
-
             <FormControl fullWidth>
               <FormLabel htmlFor="gender">Gender</FormLabel>
               <input
@@ -152,13 +199,15 @@ const AddUser: ProjectPage<null> = () => {
               onChangeTextField={(text) => setUsername(text)}
             />
 
-            <TextField
-              name="password"
-              title="Password"
-              placeholder="Please enter a password"
-              value={password}
-              onChangeTextField={(text) => setPassword(text)}
-            />
+            {!userId && (
+              <TextField
+                name="password"
+                title="Password"
+                placeholder="Please enter a password"
+                value={password}
+                onChangeTextField={(text) => setPassword(text)}
+              />
+            )}
 
             <TextField
               name="firstName"

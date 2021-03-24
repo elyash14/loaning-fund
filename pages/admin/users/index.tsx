@@ -73,14 +73,14 @@ const columns: ColDef[] = [
     renderCell: (params: CellParams) => {
       return (
         <div style={{ textAlign: 'center', width: '100%' }}>
-          <Link href="/">
+          <Link href="/admin/users/add/[userId]" as={`/admin/users/add/${params.row.id}`}>
             <a>
-              <IconButton size="small" aria-label="view">
+              <IconButton size="small" aria-label="edit">
                 <EditOutlinedIcon fontSize="small" />
               </IconButton>
             </a>
           </Link>
-          <Link href="/">
+          <Link href="/admin/users">
             <a>
               <IconButton size="small" aria-label="view">
                 <VisibilityOutlinedIcon fontSize="small" />
