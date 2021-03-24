@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { Fab, IconButton, Paper } from '@material-ui/core';
+import { Box, Fab, IconButton, Paper, styled } from '@material-ui/core';
 // import ImageIcon from "@material-ui/icons/Image";
 import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -19,15 +19,53 @@ import {
   ColParams,
 } from '@material-ui/data-grid';
 import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 const FabAction = dynamic(() => import('../../../src/components/general/FabAction'));
 
+const UserAvatarAndUsername = styled(Box)({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  '& .avatar': {
+    width: 40,
+    height: 40,
+    marginRight: 15,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+});
+
 const columns: ColDef[] = [
-  { field: 'username', headerName: 'Username', flex: 1 },
+  {
+    field: 'username',
+    headerName: 'Username',
+    flex: 1,
+    renderCell: (params: CellParams) => {
+      return (
+        <UserAvatarAndUsername>
+          <div className="avatar">
+            <Image
+              src={
+                params.row.avatarPicture
+                  ? params.row.avatarPicture
+                  : `/images/${params.row.gender.toLowerCase()}-avatar.png`
+              }
+              alt={params.row.username}
+              width={40}
+              height={40}
+            />
+          </div>
+          <div>{params.row.username}</div>
+        </UserAvatarAndUsername>
+      );
+    },
+  },
   { field: 'firstName', headerName: 'First Name', flex: 1 },
   { field: 'lastName', headerName: 'Last name', flex: 1 },
   { field: 'createdAt', headerName: 'Created At', width: 250, filterable: false },
   {
     field: '',
+    sortable: false,
     flex: 1,
     disableClickEventBubbling: true,
     headerAlign: 'center',

@@ -46,6 +46,7 @@ usersHandler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         firstName: true,
         lastName: true,
         username: true,
+        gender: true,
         avatarPicture: true,
         createdAt: true,
       },
@@ -72,11 +73,11 @@ usersHandler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   // move temp uploaded file to public/avatar directory
   let avatarPath = null;
   if (body.avatarFileName) {
-    avatarPath = 'public/avatars/' + body.avatarFileName;
+    avatarPath = '/avatars/' + body.avatarFileName;
     if (!fs.existsSync('public/avatars')) {
       fs.mkdirSync('public/avatars');
     }
-    fs.rename('tmp/' + body.avatarFileName, avatarPath, (err) => {});
+    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => {});
   }
 
   // save user
