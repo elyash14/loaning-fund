@@ -14,6 +14,7 @@ export interface IUser {
   creditCard?: string;
   color?: string;
   lastLogin?: string;
+  createdAt?: string;
   role: Role;
   referral: IUser;
 }

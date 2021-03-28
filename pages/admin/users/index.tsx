@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { Box, Fab, IconButton, Paper, styled } from '@material-ui/core';
+import { Box, IconButton, Paper, styled } from '@material-ui/core';
 // import ImageIcon from "@material-ui/icons/Image";
 import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -80,7 +80,10 @@ const columns: ColDef[] = [
               </IconButton>
             </a>
           </Link>
-          <Link href="/admin/users">
+          <Link
+            href="/admin/users/view/[userId]"
+            as={`/admin/users/view/${params.row.id}`}
+          >
             <a>
               <IconButton size="small" aria-label="view">
                 <VisibilityOutlinedIcon fontSize="small" />

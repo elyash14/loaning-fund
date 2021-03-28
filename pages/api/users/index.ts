@@ -110,9 +110,17 @@ usersHandler.put(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const { body } = req;
+  // retrieve user
+  const user = await prisma.user.findUnique({
+    select: {
+      id: true,
+      avatarPicture: true,
+    },
+    where: { id: body.id },
+  });
 
   // move temp uploaded file to public/avatar directory
-  let avatarPath = null;
+  let avatarPath = user.avatarPicture;
   if (body.avatarFileName) {
     avatarPath = '/avatars/' + body.avatarFileName;
     if (!fs.existsSync('public/avatars')) {
@@ -121,13 +129,6 @@ usersHandler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => {});
 
     // remove old picture
-    const user = await prisma.user.findUnique({
-      select: {
-        id: true,
-        avatarPicture: true,
-      },
-      where: { id: body.id },
-    });
     if (user.avatarPicture) {
       fs.unlink('public' + user.avatarPicture, function (err) {
         if (err) return console.log(err);
