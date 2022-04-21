@@ -8,28 +8,28 @@ import {
   Grid,
   Typography,
   InputBase,
-} from "@material-ui/core";
-import { NextPageContext } from "next";
-import { csrfToken } from "next-auth/client";
-import { useState } from "react";
-import Alert from "../../src/components/general/Alert";
-import theme from "../../src/configs/theme";
+} from '@material-ui/core';
+import { NextPageContext } from 'next';
+import { getCsrfToken } from 'next-auth/react';
+import { useState } from 'react';
+import Alert from '../../src/components/general/Alert';
+import theme from '../../src/configs/theme';
 
 const GridWrapper = styled(Grid)({
   maxWidth: 400,
 });
 
 const Greeting = styled(Typography)({
-  fontWeight: "bold",
+  fontWeight: 'bold',
   marginBottom: theme.spacing(6),
-  textAlign: "center",
+  textAlign: 'center',
 });
 
 const SignInForm = styled(Paper)({
   padding: theme.spacing(10, 4),
-  "&>form": {
-    display: "flex",
-    flexDirection: "column",
+  '&>form': {
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 
@@ -70,12 +70,7 @@ const SignIn = ({ csrfToken, error }) => {
                 Please enter your password
               </FormHelperText>
             </FormControl>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-            >
+            <Button type="submit" variant="contained" color="primary" size="large">
               Sign in
             </Button>
           </form>
@@ -91,11 +86,12 @@ const SignIn = ({ csrfToken, error }) => {
   );
 };
 
-SignIn.getInitialProps = async (context: NextPageContext) => {
+export async function getServerSideProps(context: NextPageContext) {
   return {
-    csrfToken: await csrfToken(context),
-    error: context.query.error,
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
   };
-};
+}
 
 export default SignIn;

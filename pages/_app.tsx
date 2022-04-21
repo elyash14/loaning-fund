@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import '../public/style.css';
-import { Provider } from 'next-auth/client';
+import { SessionProvider } from 'next-auth/react';
 import { useEffect } from 'react';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import theme from '../src/configs/theme';
@@ -8,7 +8,7 @@ import theme from '../src/configs/theme';
 const AdminLayout = dynamic(() => import('../src/layouts/Admin'));
 const BlankLayout = dynamic(() => import('../src/layouts/Blank'));
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const Layout = Component.layout === 'admin' ? AdminLayout : BlankLayout;
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <Provider session={pageProps.session}>
+    <SessionProvider session={session}>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </Layout>
       </ThemeProvider>
-    </Provider>
+    </SessionProvider>
   );
 }
 

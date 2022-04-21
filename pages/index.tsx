@@ -1,20 +1,15 @@
-import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/client";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Button,
-} from "@material-ui/core";
-import RestoreIcon from "@material-ui/icons/Restore";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
-import { useState } from "react";
-import Link from "next/link";
+import Head from 'next/head';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { BottomNavigation, BottomNavigationAction, Button } from '@material-ui/core';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-  const [session, loading] = useSession();
+  const { data: session } = useSession();
   const [value, setValue] = useState(0);
-
 
   return (
     <div>
@@ -32,13 +27,13 @@ export default function Home() {
         {!session && (
           <>
             Not signed in <br />
-            <button onClick={signIn}>Sign in</button>
+            <button onClick={() => signIn()}>Sign in</button>
           </>
         )}
         {session && (
           <>
             Signed in as {session.user.email} <br />
-            <button onClick={signOut}>Sign out</button>
+            <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
       </div>

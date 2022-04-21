@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://phpmyadmin:root@localhost:3306/loaning_fund_db"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -21,9 +21,9 @@ model User {
   createdAt     DateTime  @default(now())
   lastLogin     DateTime?
   role          Role      @default(USER)
-  referral      User?     @relation(fields: [referalId], references: [id])
   referalId     String?
-  User          User[]    @relation("UserToUser")
+  referal       User?     @relation("ReferalUsers", fields: [referalId], references: [id])
+  referals      User[]    @relation("ReferalUsers")
 }
 
 enum Role {

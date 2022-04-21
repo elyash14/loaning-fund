@@ -1,11 +1,11 @@
-import { Box, Button, Grid, Paper, styled, Typography } from '@material-ui/core';
+import { Box, Grid, Paper, styled, Typography } from '@material-ui/core';
 import { FC } from 'react';
 import { IUser } from '../../interfaces/users';
 import Image from 'next/image';
 import theme from '../../configs/theme';
-import Link from 'next/link';
 import moment from 'moment';
 import Skeleton from '@material-ui/lab/Skeleton';
+import BackToUserList from './BackToUserList';
 
 const TopBox = styled(Box)({
   display: 'flex',
@@ -28,17 +28,6 @@ const TopBox = styled(Box)({
         fontWeight: 'bold',
       },
     },
-  },
-});
-
-const BackBottomWrapper = styled(Box)({
-  display: 'flex',
-  marginTop: theme.spacing(2),
-  paddingTop: theme.spacing(2),
-  borderTop: `1px solid ${theme.palette.grey[700]}`,
-  justifyContent: 'flex-end',
-  '& button': {
-    marginLeft: 5,
   },
 });
 
@@ -131,13 +120,7 @@ const BasicInfoTab: FC<IBasicInfoTab> = ({ user }) => {
             </Info>
           </Grid>
         </Grid>
-        <BackBottomWrapper>
-          <Link href="/admin/users">
-            <a>
-              <Button variant="outlined">Back To List</Button>
-            </a>
-          </Link>
-        </BackBottomWrapper>
+        <BackToUserList />
       </Box>
     </Paper>
   );

@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IModelFilter } from '../../../src/interfaces/general';
-import prisma from '../../../src/prisma/prisma';
+import prisma from '../../../prisma/prisma';
 import { makeHash } from '../../../src/utils/general';
 import fs from 'fs';
 
@@ -77,7 +77,7 @@ usersHandler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     if (!fs.existsSync('public/avatars')) {
       fs.mkdirSync('public/avatars');
     }
-    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => {});
+    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => { });
   }
 
   // save user
@@ -126,7 +126,7 @@ usersHandler.put(async (req: NextApiRequest, res: NextApiResponse) => {
     if (!fs.existsSync('public/avatars')) {
       fs.mkdirSync('public/avatars');
     }
-    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => {});
+    fs.rename('tmp/' + body.avatarFileName, 'public' + avatarPath, (err) => { });
 
     // remove old picture
     if (user.avatarPicture) {

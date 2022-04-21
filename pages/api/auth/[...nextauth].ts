@@ -1,18 +1,21 @@
-import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
-import { makeHash } from "../../../src/utils/general";
-import Adapters from "next-auth/adapters";
-import prisma from '../../../src/prisma/prisma'
+import NextAuth from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { PrismaClient } from "@prisma/client"
+import { makeHash } from "utils/general";
 
-const options = {
-  // Configure one or more authentication providers
+const prisma = new PrismaClient()
+
+export default NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
-    Providers.Credentials({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
+      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: {
           label: "Username",
@@ -21,11 +24,11 @@ const options = {
         },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      async authorize(credentials, req) {
         const user = prisma.user.findFirst({
           where: {
             username: credentials.username,
-            password: makeHash( credentials.password)
+            password: makeHash(credentials.password)
           }
         });
         if (user) {
@@ -38,29 +41,8 @@ const options = {
           // return Promise.reject(new Error('error message')) // Redirect to error page
           // return Promise.reject('/path/to/redirect')        // Redirect to a URL
         }
-      },
-    }),
+      }
+    })
   ],
+})
 
-  pages: {
-    signIn: '/auth/signin',
-    // signOut: '/auth/signout',
-    // error: '/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/auth/verify-request', // (used for check email message)
-    // newUser: null // If set, new users will be directed here on first sign in
-  },
-
-  adapter: Adapters.Prisma.Adapter({ prisma }),
-
-  session: {
-    jwt: true,
-    // Seconds - How long until an idle session expires and is no longer valid.
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-
-  secret: process.env.APP_SECRET,
-
-  // debug: true
-};
-
-export default (req, res) => NextAuth(req, res, options);

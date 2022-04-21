@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../src/prisma/prisma';
+import prisma from '../../prisma/prisma';
 import { makeHash } from '../../src/utils/general';
 import jwt from 'next-auth/jwt';
 

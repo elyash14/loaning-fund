@@ -1,11 +1,17 @@
-import { AppBar, Paper, Tab, Tabs } from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import { AppBar, Tab, Tabs } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getUser } from '../../../../src/apis/user';
 import TabPanel from '../../../../src/components/general/TabPanel';
-import BasicInfoTab from '../../../../src/components/user-profile/BasicInfoTab';
 import { ProjectPage } from '../../../../src/interfaces/general';
 import { IUser } from '../../../../src/interfaces/users';
+const BasicInfoTab = dynamic(
+  () => import('../../../../src/components/user-profile/BasicInfoTab'),
+);
+const AccountsList = dynamic(
+  () => import('../../../../src/components/user-profile/AccountsList'),
+);
 
 const ViewUser: ProjectPage<null> = () => {
   const router = useRouter();
@@ -48,7 +54,7 @@ const ViewUser: ProjectPage<null> = () => {
         <BasicInfoTab user={user} />
       </TabPanel>
       <TabPanel value={tabIndex} index={1}>
-        <Paper elevation={1}>User Accounts</Paper>
+        <AccountsList user={user} />
       </TabPanel>
     </div>
   );
